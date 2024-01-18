@@ -11,6 +11,8 @@ from numpy import asarray
 from numpy.ctypeslib import ndpointer
 import tensorflow as tf
 from tensorflow.lite.python import schema_py_generated as schema_fb
+from tvm.contrib import graph_executor as runtime
+import tvm
 
 def OnnxWeights2Torch(params):
     return torch.from_numpy(numpy_helper.to_array(params))
@@ -20,19 +22,19 @@ def OnnxWeights2Numpy(params):
 
 def Torch2OnnxWeights(params):
     return numpy_helper.from_array(params.numpy())
- 
+
 def OutputsOffset(subgraph, j):
     o = flatbuffers.number_types.UOffsetTFlags.py_type(subgraph._tab.Offset(8))
     if o != 0:
         a = subgraph._tab.Vector(o)
         return a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 4)
     return 0
- 
+
 def buffer_change_output_tensor_to(model_buffer, new_tensor_i):
-    
+
     root = schema_fb.Model.GetRootAsModel(model_buffer, 0)
     output_tensor_index_offset = OutputsOffset(root.Subgraphs(0), 0)
-    
+
     # Flatbuffer scalars are stored in little-endian.
     new_tensor_i_bytes = bytes([
     new_tensor_i & 0x000000FF, \
@@ -51,7 +53,7 @@ def generate_random_data(model_path):
         model_buffer = f.read()
     model = tf.lite.Interpreter(model_content=model_buffer)
     input_details = model.get_input_details()
-    input_tensors = [] 
+    input_tensors = []
     # print(tuple(input_details[0]['shape'].astype(np.int32).tolist()))
     # if len(input_details) == 1:
     #     if input_details[0]['shape'].astype(np.int32).tolist()[3] == 3:
@@ -97,12 +99,14 @@ def model_inference(model_path, inputs, out_index=None):
             output = np.concatenate((output, interpreter.get_tensor(output_details[0]['index'])), axis=0)
     return output
 
-def tflite_inference(model_path, lib_path, output_shape, inputs_ctypes_ptr):
+def tflite_inference(model_path, lib_path, output_shape, inputs_ctypes_ptr, num_input, num_output):
     # c_lib = ctypes.cdll.LoadLibrary("minimal_build/libminimal.so")
     c_lib = ctypes.cdll.LoadLibrary(lib_path)
-    # c_lib.forward.restype = ctypes.POINTER(ctypes.c_float)
-    c_lib.forward.restype = ndpointer(dtype=c_float, shape=output_shape)
-    out_tflite_c = c_lib.forward(model_path.encode(), inputs_ctypes_ptr)
+    # c_lib.tflite_minimal.restype = ctypes.POINTER(ctypes.c_float)
+    c_lib.tflite_minimal.restype = ndpointer(dtype=c_float, shape=output_shape)
+    # c_lib.tflite_minimal.restype = POINTER(c_float)
+    c_lib.tflite_minimal.argtypes = [c_char_p, POINTER(c_float), c_int, c_int]
+    out_tflite_c = c_lib.tflite_minimal(model_path.encode(), inputs_ctypes_ptr, num_input, num_output)
     return out_tflite_c
 
 def CustomDLCoder_inference(lib_path, output_shape, inputs_ctypes_ptr):
@@ -111,6 +115,17 @@ def CustomDLCoder_inference(lib_path, output_shape, inputs_ctypes_ptr):
     coder_lib.coder.restype = ndpointer(dtype=c_float, shape=output_shape)
     out_tflite_c = coder_lib.coder(inputs_ctypes_ptr)
     return out_tflite_c
+
+def TVM_inference(lib, input_tensor, inputs):
+    module = runtime.GraphModule(lib["default"](tvm.cpu(0)))
+    module.set_input(input_tensor, tvm.nd.array(inputs))
+
+    # Run
+    module.run()
+
+    # Get output
+    tvm_output = module.get_output(0).numpy()
+    return tvm_output
 
 def TfliteToOnnx(path, model_name):
     if model_name == None:
@@ -167,4 +182,3 @@ def weights_format_parser(weights_format):
         return 'kTfLiteFullyConnectedWeightsFormatDefault'
     else:
         return 'kTfLiteFullyConnectedWeightsFormatShuffled4x16Int8'
-        
