@@ -124,7 +124,20 @@ The generated code can be found in *./tensorflow-2.9.1/tensorflow/lite/examples/
 
 For teting our method on GPT-2, you need to first download the model through OneDrive (https://monashuni-my.sharepoint.com/:u:/g/personal/mingyi_zhou_monash_edu/EUq_riT5FVZClZZUUDlYDnkB5tT_j6YPtCmkUAPCvrMaFg?e=N8UkbV). The source model is collected from Hugginface (https://huggingface.co/distilgpt2).
 
-Then, copy the model to the './tflite_model' folder, and run:
+Next, copy the model to the './tflite_model' folder, and modify the tflite cmake code (the gpt2.tflite has different input type):
+
+```
+rm ./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal.cc
+mv ./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal_gpt2.cc ./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal.cc
+```
+
+When you want to try other models (not GPT_2), remember to restore the original TFLite cmake code:
+
+```
+cp -r ./build_files/minimal ./tensorflow-2.9.1/tensorflow/lite/examples/
+```
+
+Then, run:
 
 ```
 python main.py --free_unused_data=True --model_name=gpt2
