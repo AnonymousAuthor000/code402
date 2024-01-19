@@ -38,11 +38,8 @@ extern "C" const float* tflite_minimal(char* path, float* input_v, int num_input
   // timeval t_start, t_end;
   std::unique_ptr<tflite::FlatBufferModel> model =
       tflite::FlatBufferModel::BuildFromFile(filename);
-  InterpreterOptions* options_experimental = new InterpreterOptions();
-  // We set it to true to show the maximal mem cost because we do not optimize the mem usage in our tool (i.e., detel intermediate tensors)
-  options_experimental->SetPreserveAllTensors();  
   tflite::ops::builtin::BuiltinOpResolver resolver;
-  tflite::InterpreterBuilder builder(*model, resolver, options_experimental);
+  tflite::InterpreterBuilder builder(*model, resolver);
   std::unique_ptr<tflite::Interpreter> interpreter;
   builder(&interpreter);
   // gettimeofday( &t_start, NULL);
@@ -53,10 +50,6 @@ extern "C" const float* tflite_minimal(char* path, float* input_v, int num_input
   float* output = interpreter->typed_output_tensor<float>(0);
   float* output_f = new float[num_output];
   memcpy(output_f, output, 1*num_output*sizeof(float));
-  // gettimeofday( &t_end, NULL);
-  // double delta_t = (t_end.tv_sec-t_start.tv_sec) + 
-  //                 (t_end.tv_usec-t_start.tv_usec)/1000000.0;
-  // std::cout << "TFLite time cost: " << delta_t  << "s" << std::endl;
-  // std::cout << "TFLite output: " << output[0] << std::endl;
+
   return output_f;
 }
