@@ -31,7 +31,7 @@ limitations under the License.
 
 using namespace tflite;
 
-extern "C" const float* forward(char* path, float *input_v) {
+extern "C" const float* tflite_minimal(char* path, float *input_v) {
   const char* filename = path;
   std::cout << "TFLite model: " << filename << std::endl;
   // Load model
