@@ -122,5 +122,4 @@ python main.py --free_unused_data=True --model_name=squeezenet
 
 The generated code can be found in *./tensorflow-2.9.1/tensorflow/lite/examples/coder*. The compiled shared library is in *./coder_x86_build/libcoder.so*
 
-We provide an example of how to evaluate the memory performance between different deployment stratiegies in "tflite_test.py". Note that you should test one strategies (e.g., tflite c++ API, Our method, TVM) at once and disable others to avoid measuring error. 
 
