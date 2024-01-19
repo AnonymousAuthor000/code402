@@ -87,7 +87,7 @@ bash build.sh
 cd ..
 ```
 
-If you have any problems in build TF from the source, please see: https://www.tensorflow.org/install/source .
+We rebuild the TF python package because the TFLite-cmake and our CustomDLCoder are compiled on your machine, rebuilding TF can help us to remove the error caused by compilation process and test different methods smoothly. If you have any problems in build TF from the source, please see: https://www.tensorflow.org/install/source .
 
 ## Copy the cmake script to the TFLite source project:  
 
