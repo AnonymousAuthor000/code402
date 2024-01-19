@@ -108,13 +108,13 @@ cmake --build . -j && cd ..
 
 ## Run CustomDLCoder
 
-Test our method on SqueezeNet model. You can also change the test model. All models are compatible with the baseline (the provided tflite cmake project). For other models, you may need to manully modify the input shape of the model in *./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal.cc*
+Test our method on SqueezeNet model. You can also change the test model. All models are compatible with the baseline (the provided tflite cmake project).
 
 ```
 python main.py --model_name=squeezenet
 ```
 
-For speeding up the inference and saving the memory, delete the unused intermediate data:
+If you want to speed up the inference and saving the memory, you can set the "--free_unused_data" to True to delete the unused intermediate data:
 
 ```
 python main.py --free_unused_data=True --model_name=squeezenet
