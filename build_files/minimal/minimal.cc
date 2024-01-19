@@ -31,7 +31,7 @@ limitations under the License.
 
 using namespace tflite;
 
-extern "C" const float* tflite_minimal(char* path, float *input_v) {
+extern "C" const float* tflite_minimal(char* path, float* input_v, int num_input, int num_output) {
   const char* filename = path;
   std::cout << "TFLite model: " << filename << std::endl;
   // Load model
@@ -48,14 +48,15 @@ extern "C" const float* tflite_minimal(char* path, float *input_v) {
   // gettimeofday( &t_start, NULL);
   interpreter->AllocateTensors();
   float* input = interpreter->typed_input_tensor<float>(0);
-  memcpy(input, input_v, 1*224*224*3*sizeof(float)); 
+  memcpy(input, input_v, 1*num_input*sizeof(float)); 
   interpreter->Invoke();
   float* output = interpreter->typed_output_tensor<float>(0);
-
+  float* output_f = new float[num_output];
+  memcpy(output_f, output, 1*num_output*sizeof(float));
   // gettimeofday( &t_end, NULL);
   // double delta_t = (t_end.tv_sec-t_start.tv_sec) + 
   //                 (t_end.tv_usec-t_start.tv_usec)/1000000.0;
   // std::cout << "TFLite time cost: " << delta_t  << "s" << std::endl;
   // std::cout << "TFLite output: " << output[0] << std::endl;
-  return output;
+  return output_f;
 }
