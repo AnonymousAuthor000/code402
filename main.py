@@ -139,7 +139,7 @@ file = open('./obfjson/model' + '_' + opt.model_name + '.json', 'w')
 file.write(jsondata)
 file.close()
 
-model_assembler(interpreter, './obfjson/model' + '_' + opt.model_name + '.json', opt.free_unused_data)
+model_assembler(interpreter, './obfjson/model' + '_' + opt.model_name + '.json', opt.free_unused_data, enable_sig=enable_sig)
 dinamic_config(unknown_config, './obfjson/model' + '_' + opt.model_name + '.json', os.path.join(model_path, model_name), enable_sig=enable_sig)
 os.system('python eval.py --model_name=' + opt.model_name + ' --latency=True')
 
