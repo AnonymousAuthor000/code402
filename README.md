@@ -92,8 +92,8 @@ If you have any problems in build TF from the source, please see: https://www.te
 ## Copy the cmake script to the TFLite source project:  
 
 ```
-cp ./build_files/coder ./tensorflow-2.9.1/tensorflow/lite/examples/
-cp ./build_files/minimal ./tensorflow-2.9.1/tensorflow/lite/examples/
+cp -r ./build_files/coder ./tensorflow-2.9.1/tensorflow/lite/examples/
+cp -r ./build_files/minimal ./tensorflow-2.9.1/tensorflow/lite/examples/
 cp ./build_files/tflite_source/* ./tensorflow-2.9.1/tensorflow/lite/kernels/
 ```
 
@@ -102,7 +102,7 @@ cp ./build_files/tflite_source/* ./tensorflow-2.9.1/tensorflow/lite/kernels/
 In our paper, we compare our method with the original tflite cmake project (more details about tflite cmake: https://www.tensorflow.org/lite/guide/build_cmake). Note that to compare our method with baseline, we disable some optimizations because our method may not support them (we didn't do a comprehensive test). So you can compile the baseline:
 
 ```
-cd minimal_build && cmake ../tensorflow-2.9.1/tensorflow/lite/examples/minimal -DTFLITE_ENABLE_XNNPACK=OFF -DTFLITE_ENABLE_MMAP=OFF -DTFLITE_ENABLE_RUY=OFF -DTFLITE_ENABLE_NNAPI=ON -DTFLITE_ENABLE_GPU=OFF
+cd minimal_x86_build && cmake ../tensorflow-2.9.1/tensorflow/lite/examples/minimal -DTFLITE_ENABLE_XNNPACK=OFF -DTFLITE_ENABLE_MMAP=OFF -DTFLITE_ENABLE_RUY=OFF -DTFLITE_ENABLE_NNAPI=OFF -DTFLITE_ENABLE_GPU=OFF
 cmake --build . -j && cd ..
 ```
 
