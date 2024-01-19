@@ -130,5 +130,5 @@ Then, copy the model to the './tflite_model' folder, and run:
 python main.py --free_unused_data=True --model_name=gpt2
 ```
 
-Note that testing on GPT2 needs a machine with large RAM (smaller than 128 Gb may cause termination of compilation). 
+Note that testing on GPT2 needs a machine with large RAM (smaller than 64 Gb may cause termination of compilation). 
 
