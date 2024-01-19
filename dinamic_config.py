@@ -21,7 +21,7 @@ def dinamic_config(unknown_config, json_path, model_path, enable_sig):
     if len(unknown_config) == 0 or enable_sig == False:
         os.system("cd coder_x86_build && cmake ../tensorflow-2.9.1/tensorflow/lite/examples/coder -DTFLITE_ENABLE_XNNPACK=OFF -DTFLITE_ENABLE_MMAP=OFF -DTFLITE_ENABLE_RUY=OFF -DTFLITE_ENABLE_NNAPI=OFF -DTFLITE_ENABLE_GPU=OFF && cd ..")
         os.system("cd coder_x86_build && cmake --build . -j && cd ..")
-        diff = eval(model_path, (not enable_sig))
+        diff = eval(model_path, enable_sig)
         if diff < 1e-5:
             print("find the config")
             print("Output difference: ", diff)
@@ -77,7 +77,7 @@ def dinamic_config(unknown_config, json_path, model_path, enable_sig):
                         break
             os.system("cd coder_x86_build && cmake ../tensorflow-2.9.1/tensorflow/lite/examples/coder -DTFLITE_ENABLE_XNNPACK=OFF -DTFLITE_ENABLE_MMAP=OFF -DTFLITE_ENABLE_RUY=OFF -DTFLITE_ENABLE_NNAPI=OFF -DTFLITE_ENABLE_GPU=OFF && cd ..")
             os.system("cd coder_x86_build && cmake --build . -j && cd ..")
-            diff = eval(model_path, (not enable_sig))
+            diff = eval(model_path, enable_sig)
             if diff < 1e-5:
                 print("find the config")
                 print("Output difference: ", diff)
