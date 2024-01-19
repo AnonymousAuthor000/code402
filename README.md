@@ -122,4 +122,13 @@ python main.py --free_unused_data=True --model_name=squeezenet
 
 The generated code can be found in *./tensorflow-2.9.1/tensorflow/lite/examples/coder*. The compiled shared library is in *./coder_x86_build/libcoder.so*
 
+For teting our method on GPT-2, you need to first download the model through OneDrive (https://monashuni-my.sharepoint.com/:u:/g/personal/mingyi_zhou_monash_edu/EUq_riT5FVZClZZUUDlYDnkB5tT_j6YPtCmkUAPCvrMaFg?e=N8UkbV). The source model is collected from Hugginface (https://huggingface.co/distilgpt2).
+
+Then, copy the model to the './tflite_model' folder, and run:
+
+```
+python main.py --free_unused_data=True --model_name=gpt2
+```
+
+Note that testing on GPT2 needs a machine with large RAM.
 

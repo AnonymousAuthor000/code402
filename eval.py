@@ -58,7 +58,7 @@ def eval(model_path, not_gpt):
     time_start=time.time()
     out_tflite = tflite_inference(model_path, "minimal_x86_build/libminimal.so", output_shape, inputs_ctypes_ptr, num_input, num_output)
     time_end=time.time()
-    print("tflite cmake time: ", time_end-time_start)
+    print("tflite time: ", time_end-time_start)
     # print("tflite_cmake error: ", np.max(np.abs(out_tflite - output_ori)))
     time_start=time.time()
     out_coder = CustomDLCoder_inference("coder_x86_build/libcoder.so", output_shape, inputs_ctypes_ptr)

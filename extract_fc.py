@@ -74,35 +74,35 @@ def extract_fc(op, kwargs, interpreter, unknown_config):
                     kwargs['filter_tensor_data=filter_raw'] = type_str + '* filter_tensor_data=filter_raw'
                     kwargs['input_2_placeholder,'] = ''
 
-            if np.size(filter_tensor) > 4000000:
-                rows_per_split = np.size(filter_tensor) // 100
-                print("rows_per_split: ", rows_per_split)
-                # Create and initialize the split arrays
-                split_arrays = []
-                for i in range(100):
-                    start_row = i * rows_per_split
-                    end_row = (i + 1) * rows_per_split if i < 99 else None
-                    split_arrays.append(filter_tensor[start_row:end_row, :])
-                # split_arrays = np.array_split(filter_tensor, 10)
-                kwargs['filter_raw='] = ''
+            # if np.size(filter_tensor) > 4000000:
+            #     rows_per_split = np.size(filter_tensor) // 100
+            #     print("rows_per_split: ", rows_per_split)
+            #     # Create and initialize the split arrays
+            #     split_arrays = []
+            #     for i in range(100):
+            #         start_row = i * rows_per_split
+            #         end_row = (i + 1) * rows_per_split if i < 99 else None
+            #         split_arrays.append(filter_tensor[start_row:end_row, :])
+            #     # split_arrays = np.array_split(filter_tensor, 10)
+            #     kwargs['filter_raw='] = ''
 
-                for i, split_array in enumerate(split_arrays):
-                    header_file_name = f"array_part_{i + 1}.h"
+            #     for i, split_array in enumerate(split_arrays):
+            #         header_file_name = f"array_part_{i + 1}.h"
 
-                    with open(header_file_name, 'w') as header_file:
-                        header_file.write(f'# ifndef ARRAY_PART_{i + 1}_H\n')
-                        header_file.write(f'# define ARRAY_PART_{i + 1}_H\n\n')
-                        header_file.write('extern float myLargeArrayPart{}[{}];\n\n'.format(i + 1, split_array.shape[0] * split_array.shape[1]))
-                        header_file.write('float myLargeArrayPart' + str(i + 1) + '[' + str(split_array.shape[0] * split_array.shape[1]) + ']=' + '{' + str(split_array.flatten('C').tolist()).strip('[').strip(']'))
+            #         with open(header_file_name, 'w') as header_file:
+            #             header_file.write(f'# ifndef ARRAY_PART_{i + 1}_H\n')
+            #             header_file.write(f'# define ARRAY_PART_{i + 1}_H\n\n')
+            #             header_file.write('extern float myLargeArrayPart{}[{}];\n\n'.format(i + 1, split_array.shape[0] * split_array.shape[1]))
+            #             header_file.write('float myLargeArrayPart' + str(i + 1) + '[' + str(split_array.shape[0] * split_array.shape[1]) + ']=' + '{' + str(split_array.flatten('C').tolist()).strip('[').strip(']'))
 
-                        # # Write array initialization values
-                        # for row in split_array:
-                        #     header_file.write('    {')
-                        #     header_file.write(', '.join(map(str, row)))
-                        #     header_file.write('},\n')
+            #             # # Write array initialization values
+            #             # for row in split_array:
+            #             #     header_file.write('    {')
+            #             #     header_file.write(', '.join(map(str, row)))
+            #             #     header_file.write('},\n')
 
-                        header_file.write('};\n\n')
-                        header_file.write('# endif')
+            #             header_file.write('};\n\n')
+            #             header_file.write('# endif')
             # filter_dims_raw = '{' + ','.join(str(e) for e in list(filter_tensor.shape)) +'}'
             filter_dims_raw = '{' + ','.join(str(e) for e in list(tuple(tensor_details['shape']))) +'}'
             filter_dims_size = len(tensor_details['shape'])
