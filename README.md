@@ -124,15 +124,17 @@ The generated code can be found in *./tensorflow-2.9.1/tensorflow/lite/examples/
 
 (2) For teting our method on GPT-2, you need to first download the model through OneDrive (https://monashuni-my.sharepoint.com/:u:/g/personal/mingyi_zhou_monash_edu/EUq_riT5FVZClZZUUDlYDnkB5tT_j6YPtCmkUAPCvrMaFg?e=N8UkbV). The source model is collected from Hugginface (https://huggingface.co/distilgpt2).
 
-Next, remove the exist cache files, copy the model to the './tflite_model' folder, and modify the tflite cmake code (the gpt2.tflite has different input type):
+Next, remove the exist cache files, copy the model to the './tflite_model' folder, and modify the tflite cmake file (the gpt2.tflite has different input type):
 
 ```
 cd minimal_x86_build/ && rm -rf * &&cd ..
 rm ./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal.cc
 mv ./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal_gpt2.cc ./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal.cc
+cd minimal_x86_build && cmake ../tensorflow-2.9.1/tensorflow/lite/examples/minimal -DTFLITE_ENABLE_XNNPACK=OFF -DTFLITE_ENABLE_MMAP=OFF -DTFLITE_ENABLE_RUY=OFF -DTFLITE_ENABLE_NNAPI=OFF -DTFLITE_ENABLE_GPU=OFF
+cmake --build . -j && cd ..
 ```
 
-Then, follow the secton Compile the baseline (cmake project of tflite models) to rebuild the baseline. Next, run:
+Next, run:
 
 ```
 python main.py --free_unused_data=True --model_name=gpt2
