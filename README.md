@@ -127,9 +127,7 @@ The generated code can be found in *./tensorflow-2.9.1/tensorflow/lite/examples/
 Next, remove the exist cache files, copy the model to the './tflite_model' folder, and modify the tflite cmake code (the gpt2.tflite has different input type):
 
 ```
-cd minimal_x86_build/
-rm -rf *
-cd ..
+cd minimal_x86_build/ && rm -rf * &&cd ..
 rm ./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal.cc
 mv ./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal_gpt2.cc ./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal.cc
 ```
