@@ -144,6 +144,9 @@ Note that testing on GPT2 needs a machine with large RAM (RAM size that is small
 
 ```
 cp -r ./build_files/minimal ./tensorflow-2.9.1/tensorflow/lite/examples/
+cd minimal_x86_build/
+rm -rf *
+cd ..
 cd minimal_x86_build && cmake ../tensorflow-2.9.1/tensorflow/lite/examples/minimal -DTFLITE_ENABLE_XNNPACK=OFF -DTFLITE_ENABLE_MMAP=OFF -DTFLITE_ENABLE_RUY=OFF -DTFLITE_ENABLE_NNAPI=OFF -DTFLITE_ENABLE_GPU=OFF
 cmake --build . -j && cd ..
 ```
