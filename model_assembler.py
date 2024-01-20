@@ -101,7 +101,7 @@ def model_assembler(interpreter, json_path='./ObfusedModel.json', free_unused_da
                             break
                 output_id = output_id[:1]
                 print(' return %s;' % (get_inout_string(output_id)))
-            if "const Eigen::ThreadPoolDevice* device = tflite::eigen_support::CreateThreadPoolDevice(-1);" in line:
+            if 'const Eigen::ThreadPoolDevice' in line:
                 if enable_sig:
                     print(' const Eigen::ThreadPoolDevice* device = tflite::eigen_support::CreateThreadPoolDevice(-1);')
                 else:
