@@ -131,7 +131,7 @@ rm ./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal.cc
 mv ./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal_gpt2.cc ./tensorflow-2.9.1/tensorflow/lite/examples/minimal/minimal.cc
 ```
 
-Then, run:
+Then, follow the secton Compile the baseline (cmake project of tflite models) to rebuild the baseline. Next, run:
 
 ```
 python main.py --free_unused_data=True --model_name=gpt2
