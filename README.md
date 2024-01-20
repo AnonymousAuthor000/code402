@@ -140,7 +140,7 @@ Then, follow the secton Compile the baseline (cmake project of tflite models) to
 python main.py --free_unused_data=True --model_name=gpt2
 ```
 
-Note that testing on GPT2 needs a machine with large RAM (RAM size that is smaller than 64 Gb may cause termination of compilation). When you want to try other models (not GPT_2) in step (1), remember to restore the original TFLite c code:
+Note that testing on GPT2 needs a machine with large RAM (RAM size smaller than 64 Gb may cause termination of compilation). When you want to try other models (not GPT_2) in step (1), remember to restore the original TFLite c code:
 
 ```
 cp -r ./build_files/minimal ./tensorflow-2.9.1/tensorflow/lite/examples/
