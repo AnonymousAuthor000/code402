@@ -140,9 +140,11 @@ Then, follow the secton Compile the baseline (cmake project of tflite models) to
 python main.py --free_unused_data=True --model_name=gpt2
 ```
 
-Note that testing on GPT2 needs a machine with large RAM (RAM size that is smaller than 64 Gb may cause termination of compilation). When you want to try other models (not GPT_2) in step (1), remember to restore the original TFLite cmake code:
+Note that testing on GPT2 needs a machine with large RAM (RAM size that is smaller than 64 Gb may cause termination of compilation). When you want to try other models (not GPT_2) in step (1), remember to restore the original TFLite c code:
 
 ```
 cp -r ./build_files/minimal ./tensorflow-2.9.1/tensorflow/lite/examples/
+cd minimal_x86_build && cmake ../tensorflow-2.9.1/tensorflow/lite/examples/minimal -DTFLITE_ENABLE_XNNPACK=OFF -DTFLITE_ENABLE_MMAP=OFF -DTFLITE_ENABLE_RUY=OFF -DTFLITE_ENABLE_NNAPI=OFF -DTFLITE_ENABLE_GPU=OFF
+cmake --build . -j && cd ..
 ```
 
