@@ -108,7 +108,7 @@ cmake --build . -j && cd ..
 
 ## Run CustomDLCoder
 
-(1) Test our method on SqueezeNet model. You can also change the test model (set '--model_name=fruit' to use the fruit.tflite model in the 'tflite_model' folder). All models are compatible with the baseline (the provided tflite cmake project).
+(1) Test our method on SqueezeNet model. You can also change the test model (e.g., set '--model_name=fruit' to use the fruit.tflite model in the 'tflite_model' folder). All models are compatible with the baseline (the provided tflite cmake project).
 
 ```
 python main.py --model_name=squeezenet
