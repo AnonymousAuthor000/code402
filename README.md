@@ -97,27 +97,36 @@ cp -r ./build_files/minimal ./tensorflow-2.9.1/tensorflow/lite/examples/
 cp ./build_files/tflite_source/* ./tensorflow-2.9.1/tensorflow/lite/kernels/
 ```
 
-## Compile the baseline (cmake project of tflite models): 
+<!-- ## Compile the baseline (cmake project of tflite models): 
 
 In our paper, we compare our method with the original tflite cmake project (more details about tflite cmake: https://www.tensorflow.org/lite/guide/build_cmake). Note that to compare our method with baseline, we disable some optimizations because our method may not support them (we didn't do a comprehensive test). So you can compile the baseline:
 
 ```
 cd minimal_x86_build && cmake ../tensorflow-2.9.1/tensorflow/lite/examples/minimal -DTFLITE_ENABLE_XNNPACK=OFF -DTFLITE_ENABLE_MMAP=OFF -DTFLITE_ENABLE_RUY=OFF -DTFLITE_ENABLE_NNAPI=OFF -DTFLITE_ENABLE_GPU=OFF
 cmake --build . -j && cd ..
-```
+``` -->
 
 ## Run CustomDLCoder
 
-(1) Test our method on SqueezeNet model. You can also change the test model (e.g., set '--model_name=fruit' to use the fruit.tflite model in the 'tflite_model' folder). All models are compatible with the baseline (the provided tflite cmake project).
+(1) In our paper, we compare our method with the original tflite cmake project (more details about tflite cmake: https://www.tensorflow.org/lite/guide/build_cmake). Note that to compare our method with baseline, we disable some optimizations because our method may not support them (we didn't do a comprehensive test). So you can compile the baseline:
 
 ```
-python main.py --model_name=squeezenet
+cp -r ./build_files/minimal ./tensorflow-2.9.1/tensorflow/lite/examples/
+cd minimal_x86_build/ && rm -rf * &&cd ..
+cd minimal_x86_build && cmake ../tensorflow-2.9.1/tensorflow/lite/examples/minimal -DTFLITE_ENABLE_XNNPACK=OFF -DTFLITE_ENABLE_MMAP=OFF -DTFLITE_ENABLE_RUY=OFF -DTFLITE_ENABLE_NNAPI=OFF -DTFLITE_ENABLE_GPU=OFF
+cmake --build . -j && cd ..
 ```
 
-If you want to speed up the inference and saving the memory, you can set the "--free_unused_data" to True to delete the unused intermediate data:
+Then, test our method on SqueezeNet model. You can also change the test model (e.g., set '--model_name=fruit' to use the fruit.tflite model in the 'tflite_model' folder). All models are compatible with the baseline (the provided tflite cmake project).
 
 ```
 python main.py --free_unused_data=True --model_name=squeezenet
+```
+
+If you want to maintain the intermediate data, you can unset the "--free_unused_data" (it will speed up the inference and saving the memory if it is True):
+
+```
+python main.py --model_name=squeezenet
 ```
 
 The generated code can be found in *./tensorflow-2.9.1/tensorflow/lite/examples/coder*. The compiled shared library is in *./coder_x86_build/libcoder.so*
@@ -140,12 +149,5 @@ Next, run:
 python main.py --free_unused_data=True --model_name=gpt2
 ```
 
-Note that testing on GPT2 needs a machine with large RAM (RAM size smaller than 64 Gb may cause termination of compilation). When you want to try other models (not GPT_2) in step (1), remember to restore the original TFLite c code:
-
-```
-cp -r ./build_files/minimal ./tensorflow-2.9.1/tensorflow/lite/examples/
-cd minimal_x86_build/ && rm -rf * &&cd ..
-cd minimal_x86_build && cmake ../tensorflow-2.9.1/tensorflow/lite/examples/minimal -DTFLITE_ENABLE_XNNPACK=OFF -DTFLITE_ENABLE_MMAP=OFF -DTFLITE_ENABLE_RUY=OFF -DTFLITE_ENABLE_NNAPI=OFF -DTFLITE_ENABLE_GPU=OFF
-cmake --build . -j && cd ..
-```
+Note that testing on GPT2 needs a machine with large RAM (RAM size smaller than 64 Gb may cause termination of compilation). 
 
